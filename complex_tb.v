@@ -2,6 +2,7 @@
 `include "complex.v"
 `include "log2.v"
 `include"pi.v"
+`include"bit_reverse.v"
 module complex_tb;
 
     // === 測試向量 (32-bit 定點示例) =========================
@@ -12,7 +13,8 @@ module complex_tb;
     wire signed [31:0] add_re, add_im;
     wire signed [31:0] sub_re, sub_im;
     wire signed [63:0] mul_re, mul_im;   // 乘法輸出 2×WIDTH
-    
+    reg  [31:0] b,m;
+    wire [31:0] result;
     // === 例化模組 =========================================
     complex_add u_add(.a_re(a_re), .a_im(a_im),
                       .b_re(b_re), .b_im(b_im),
@@ -25,21 +27,23 @@ module complex_tb;
                       .c_re(mul_re), .c_im(mul_im));
     log2        u_log(.N_in(N),.log2(log2));	
     pi          u_pi(.pi(pi));
+    bit_reverse u_bit_reverse(.b(b),.m(m),.result(result));
     // === 測試流程 =========================================
     initial begin
         $dumpfile("wave.vcd");
         $dumpvars(0, complex_tb);
         a_re = 32'sd3;   a_im = 32'sd4;    // 3 + j4
         b_re = 32'sd1;   b_im = 32'sd2;    // 1 + j2
+        b=32'sd5;	 m=32'sd5;
         N=32'sd32;
         #5;   // 等待組合邏輯穩定
         $display("ADD: (%0d , %0d)", add_re, add_im);     // 4 , 6
         $display("SUB: (%0d , %0d)", sub_re, sub_im);     // 2 , 2
         $display("MUL: (%0d , %0d)", mul_re, mul_im);     // -5 , 10
  	$display("log(%0d)=%0d",N,log2);		  //log2(32)=5
-$display("π (Q16.16) raw = %0d", pi);
-$display("π ≈ %f", pi / 65536.0);
-
+	$display("π (Q16.16) raw = %0d", pi);
+	$display("π ≈ %f", pi / 65536.0);
+	$display("bit reverse:(%d)",result);
         #5 $finish;
     end
 endmodule
