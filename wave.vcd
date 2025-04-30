@@ -1,0 +1,125 @@
+$date
+	Wed Apr 30 05:20:48 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module complex_tb $end
+$var wire 32 ! sub_re [31:0] $end
+$var wire 32 " sub_im [31:0] $end
+$var wire 32 # pi [31:0] $end
+$var wire 64 $ mul_re [63:0] $end
+$var wire 64 % mul_im [63:0] $end
+$var wire 32 & log2 [31:0] $end
+$var wire 32 ' add_re [31:0] $end
+$var wire 32 ( add_im [31:0] $end
+$var reg 32 ) N [31:0] $end
+$var reg 32 * a_im [31:0] $end
+$var reg 32 + a_re [31:0] $end
+$var reg 32 , b_im [31:0] $end
+$var reg 32 - b_re [31:0] $end
+$scope module u_add $end
+$var wire 32 . a_im [31:0] $end
+$var wire 32 / a_re [31:0] $end
+$var wire 32 0 b_im [31:0] $end
+$var wire 32 1 b_re [31:0] $end
+$var wire 32 2 c_re [31:0] $end
+$var wire 32 3 c_im [31:0] $end
+$var parameter 32 4 W $end
+$upscope $end
+$scope module u_log $end
+$var wire 32 5 N_in [31:0] $end
+$var parameter 32 6 W $end
+$var reg 32 7 N [31:0] $end
+$var reg 32 8 log2 [31:0] $end
+$upscope $end
+$scope module u_mul $end
+$var wire 32 9 a_im [31:0] $end
+$var wire 32 : a_re [31:0] $end
+$var wire 32 ; b_im [31:0] $end
+$var wire 32 < b_re [31:0] $end
+$var wire 64 = p4 [63:0] $end
+$var wire 64 > p3 [63:0] $end
+$var wire 64 ? p2 [63:0] $end
+$var wire 64 @ p1 [63:0] $end
+$var wire 64 A c_re [63:0] $end
+$var wire 64 B c_im [63:0] $end
+$var parameter 32 C W $end
+$upscope $end
+$scope module u_pi $end
+$var parameter 32 D w $end
+$var reg 32 E domin [31:0] $end
+$var reg 32 F i [31:0] $end
+$var reg 32 G iter [31:0] $end
+$var reg 32 H pi [31:0] $end
+$var reg 32 I sign [31:0] $end
+$upscope $end
+$scope module u_sub $end
+$var wire 32 J a_im [31:0] $end
+$var wire 32 K a_re [31:0] $end
+$var wire 32 L b_im [31:0] $end
+$var wire 32 M b_re [31:0] $end
+$var wire 32 N c_re [31:0] $end
+$var wire 32 O c_im [31:0] $end
+$var parameter 32 P W $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b100000 P
+b100000 D
+b100000 C
+b100000 6
+b100000 4
+$end
+#0
+$dumpvars
+b10 O
+b10 N
+b1 M
+b10 L
+b11 K
+b100 J
+b1 I
+b110010010000111100 H
+b11111010000 G
+b11111010000 F
+b111110100001 E
+b1010 B
+b1111111111111111111111111111111111111111111111111111111111111011 A
+b11 @
+b1000 ?
+b110 >
+b100 =
+b1 <
+b10 ;
+b11 :
+b100 9
+b101 8
+b1 7
+b100000 5
+b110 3
+b100 2
+b1 1
+b10 0
+b11 /
+b100 .
+b1 -
+b10 ,
+b11 +
+b100 *
+b100000 )
+b110 (
+b100 '
+b101 &
+b1010 %
+b1111111111111111111111111111111111111111111111111111111111111011 $
+b110010010000111100 #
+b10 "
+b10 !
+$end
+#10000
