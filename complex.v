@@ -47,10 +47,10 @@
 	    output signed [2*W-1:0] c_re, // 乘法後位寬加倍
 	    output signed [2*W-1:0] c_im
 	);
-	    wire signed [2*W-1:0] p1 = a_re * b_re;
-	    wire signed [2*W-1:0] p2 = a_im * b_im;
-	    wire signed [2*W-1:0] p3 = a_re * b_im;
-	    wire signed [2*W-1:0] p4 = a_im * b_re;
+	    wire signed [2*W-1:0] p1 = (a_re * b_re)>>>16;
+	    wire signed [2*W-1:0] p2 = (a_im * b_im)>>>16;
+	    wire signed [2*W-1:0] p3 = (a_re * b_im)>>>16;
+	    wire signed [2*W-1:0] p4 = (a_im * b_re)>>>16;
 
 	    assign c_re = p1 - p2;
 	    assign c_im = p3 + p4;

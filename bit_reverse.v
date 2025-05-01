@@ -8,7 +8,7 @@ module bit_reverse #(parameter w = `WIDTH)(
     output reg  [31:0] result
 );
 
-    integeri;  // 用 integer 比 reg signed 更標準
+    integer i;  // 用 integer 比 reg signed 更標準
 
     always @(*) begin
         result = 0;
