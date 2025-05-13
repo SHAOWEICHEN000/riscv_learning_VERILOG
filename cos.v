@@ -2,7 +2,7 @@
 `define COS_V
 
 module cos_fixed #(
-    parameter ITER = 5 // 建議不要超過 100，避免溢位和過度延遲
+    parameter ITER = 7 // 建議不要超過 100，避免溢位和過度延遲
 )(
     input  wire signed [31:0] x,   // Q16.16 弧度輸入
     output reg  signed [31:0] y    // Q16.16 cos(x)

@@ -103,9 +103,9 @@ module fft #(parameter w=`WIDTH) (
                         k = k >> 1;
                         pi_D=pi_out;
                         //$display("pi_D=%0f", pi_D/65536.0);
-                        Theta_T= (pi_out) *2.0/ N;
+                        Theta_T= ((pi_out) / n)<<1;
 		        #10
-                        //$display("Theta_T = %0f", Theta_T / 65536.0);
+                        $display("Theta_T = %0f", Theta_T / 65536.0);
 	    		
                         phi_T_Re = y_cos1;
                         phi_T_Im = -y_sin1;
