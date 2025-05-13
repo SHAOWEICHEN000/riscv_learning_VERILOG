@@ -25,16 +25,17 @@ module fft #(parameter w=`WIDTH) (
     output reg done
 );
     integer k, i, j, b;
-    reg signed [31:0] Theta_T, phi_T_Re, phi_T_Im, T_Re, T_Im, temp_Re, temp_Im;
+    reg signed [31:0] Theta_T,Theta_T1, phi_T_Re, phi_T_Im, T_Re, T_Im, temp_Re, temp_Im;
     reg signed [31:0] x_Re_reg[0:7];
     reg signed [31:0] x_Im_reg[0:7];
     reg signed [31:0] pi_D;
-    
+    	
+
     integer ii,a, m, n;
 
-    wire signed [31:0] y_cos, y_sin;
+    wire  signed[31:0] y_cos1, y_sin1;
     wire signed [31:0] add_Re, add_Im, sub_Re, sub_Im;
-    wire signed [63:0] mul1_Re, mul1_Im, mul2_Re, mul2_Im;
+    wire  signed[31:0] mul1_Re, mul1_Im, mul2_Re, mul2_Im;
     wire signed [31:0] log2_out, pi_out, bit_reverse_out;
 
     reg [3:0] state;
@@ -55,21 +56,22 @@ module fft #(parameter w=`WIDTH) (
     log2 u_log(.N_in(N), .log2(log2_out));
     pi u_pi(.pi(pi_out));
     bit_reverse u_bit_reverse(.b(b), .m(m), .result(bit_reverse_out));
-    cos_fixed u_cos1(.x( Theta_T), .y(y_cos));
-    sin_fixed u_sin2(.x( 32'sd25968), .y(y_sin));
+    cos_fixed u_cos1(.x(Theta_T), .y(y_cos1));
+    sin_fixed u_sin2(.x(Theta_T), .y(y_sin1));
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
              done <= 0;
              FFT <= 0;
              state <= IDLE;
-             pi_D <= 0;
-             m<=0;
+             pi_D = 0;
+             m=0;
              Theta_T =0;
+             Theta_T1 =0;
              phi_T_Re=0;
              phi_T_Im=0;	
-             T_Re<=1;
-             T_Im<=0;
+             T_Re=1;
+             T_Im=0;
         end else begin
             case (state)
                 IDLE: if (start) begin
@@ -91,60 +93,72 @@ module fft #(parameter w=`WIDTH) (
                      	//$display("start");
                      	//$display("statte=%0d",state);
                     while (k > 1) begin
-                    	//$display("pi_D=%0f", pi_D);
-                    	$display("pi_out=%0f", pi_out);
-                        $display("N=%0f", N );
+                    	
+                    	//$display("pi_out=%0f", pi_out/65536.0	);
+                        //$display("N=%0f", N );
                         
                        
 		
                         n = k;
                         k = k >> 1;
-                        pi_D=pi_out/65536.0;
-                        Theta_T = $itor(pi_out/N);
-                        $display("Theta_T = %0f", Theta_T / 65536.0);
+                        pi_D=pi_out;
+                        //$display("pi_D=%0f", pi_D/65536.0);
+                        Theta_T= (pi_out) *2.0/ N;
+		        #10
+                        //$display("Theta_T = %0f", Theta_T / 65536.0);
 	    		
-                        phi_T_Re = y_cos;
-                        phi_T_Im = -y_sin;
-                        $display(" phi_T_Re=%0f",  phi_T_Re/65536.0 );
-                        $display(" phi_T_Im=%0f",  phi_T_Im/65536.0);
+                        phi_T_Re = y_cos1;
+                        phi_T_Im = -y_sin1;
+                        //$display(" phi_T_Re=%0f",  phi_T_Re/65536.0);
+                        //$display(" phi_T_Im=%0f",  phi_T_Im/65536.0);
                         T_Re=32'sd65536;//65536.0
-                        T_Im=0<<16;
+                        T_Im=32'sd0;
                         //$display(" T_Re2=%0f",  T_Re);
 			//$display(" T_Im2=%0f",  T_Im);
                         for (i = 0; i < k; i = i + 1) begin
                             for (j = i; j < N; j = j + n) begin
                                 b = j + k;
+                                #10
                                 temp_Re = sub_Re;
                                 temp_Im = sub_Im;
-                                //for(i=0;i<N;i++) begin
-                   		//$display("sub x_Re_reg[%0d]=%0f,x_Im_reg[%0d]=%0f",i,   x_Re_reg[i]/65536.0,i,x_Im_reg[i]/65536.0);
-		      		//end
+                                
+                   		//$display("sub temp_Re=%0f,temp_Im=%0f", temp_Re/65536.0,temp_Im/65536.0);
+		      		
+		      		#10
                                 x_Re_reg[j] = add_Re;
                                 x_Im_reg[j] = add_Im;
-                                //for(i=0;i<N;i++) begin
-                   		//$display("add x_Re_reg[%0d]=%0f,x_Im_reg[%0d]=%0f",i,   x_Re_reg[i]/65536.0,i,x_Im_reg[i]/65536.0);
-		      		//end
-                                x_Re_reg[b] = mul2_Re>>>16;
-                                x_Im_reg[b] = mul2_Im>>>16;
-                                //for(i=0;i<N;i++) begin
-                   		//$display("mul x_Re_reg[%0d]=%0f,x_Im_reg[%0d]=%0f",i,   x_Re_reg[i]/65536.0,i,x_Im_reg[i]/65536.0);
-		      		//end
+                                
+                   		//$display("add x_Re_reg[%0d]=%0f,x_Im_reg[%0d]=%0f",j,   x_Re_reg[j]/65536.0,j,x_Im_reg[j]/65536.0);
+		      		
+		      		#10
+                                x_Re_reg[b] = mul2_Re;
+                                #10
+                                x_Im_reg[b] = mul2_Im;
+                                
+                   		//$display("mul x_Re_reg[%0d]=%0f,x_Im_reg[%0d]=%0f",b,   x_Re_reg[b]/65536.0,b,x_Im_reg[b]/65536.0);
+		      	
                             end
-                            T_Re = mul1_Re;
+                            T_Re = mul1_Re;                            
                             T_Im = mul1_Im;
-                            //$display(" fin=%0f",   T_Re);
-			    //$display(" fin =%0f", T_Im);
+                            //$display(" fin_Re=%0f,fin_Im=%0f",   T_Re/65536.0,T_Im/65536.0);
+			   
                         end
                         m = log2_out;
+                        #10
                         //$display(" m=%0f", m);
                         for (a = 0; a < N; a = a + 1) begin
+                            b=a;
+                        #10
                             b = bit_reverse_out;
+                            	
+		    	    
+                        #10
                             if (b > a) begin
-                                temp_Re = x_Re_reg[a];
-                                temp_Im = x_Im_reg[a];
+                                temp_Re = x_Re_reg[a];                                
+                                temp_Im = x_Im_reg[a];                                
                                 x_Re_reg[a] = x_Re_reg[b];
-                                x_Im_reg[a] = x_Im_reg[b];
-                                x_Re_reg[b] = temp_Re;
+                                x_Im_reg[a] = x_Im_reg[b];                                
+                                x_Re_reg[b] = temp_Re;                              
                                 x_Im_reg[b] = temp_Im;
                             end
                         end
@@ -153,6 +167,7 @@ module fft #(parameter w=`WIDTH) (
                     $display(" final: x_Re_reg[%0d]=%0f,x_Im_reg[%0d]=%0f",i,   x_Re_reg[i]/65536.0,i,x_Im_reg[i]/65536.0);
 		
 		    end
+		    #10
                     FFT <= x_Re_reg[0];
                     done <= 1;
                     state <= DONE;

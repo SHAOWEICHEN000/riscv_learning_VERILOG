@@ -2,7 +2,7 @@
 `define SIN_V
 
 module sin_fixed #(
-    parameter ITER = 5  // 可選項數，建議不要超過 100
+    parameter ITER = 30  // 可選項數，建議不要超過 100
 )(
     input  wire signed [31:0] x,   // Q16.16 格式輸入
     output reg  signed [31:0] y    // Q16.16 格式輸出 sin(x)

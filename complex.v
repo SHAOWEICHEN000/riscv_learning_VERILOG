@@ -39,21 +39,24 @@
 	// ---------- 乘法 ---------------------
 	// re = ar*br - ai*bi
 	// im = ar*bi + ai*br
-	module complex_mul
-	#(parameter W=`WIDTH)
-	(
+	// ------------------------ complex_mul ------------------------
+	module complex_mul #(parameter W = 32)(
 	    input  signed [W-1:0] a_re, a_im,
 	    input  signed [W-1:0] b_re, b_im,
-	    output signed [2*W-1:0] c_re, // 乘法後位寬加倍
-	    output signed [2*W-1:0] c_im
+	    output signed [W-1:0] c_re,
+	    output signed [W-1:0] c_im
 	);
-	    wire signed [2*W-1:0] p1 = (a_re * b_re)>>>16;
-	    wire signed [2*W-1:0] p2 = (a_im * b_im)>>>16;
-	    wire signed [2*W-1:0] p3 = (a_re * b_im)>>>16;
-	    wire signed [2*W-1:0] p4 = (a_im * b_re)>>>16;
+	    // 乘完先保持 64bit 精度
+	wire signed [63:0] p_re = a_re * b_re - a_im * b_im;
+	wire signed [63:0] p_im = a_re * b_im + a_im * b_re;
+	
+    	    // Q16.16 → 回到原位寬，這裡做四捨五入
+	wire signed [63:0] p_re_rnd = p_re + 32'sd32768;   // +0.5
+    	wire signed [63:0] p_im_rnd = p_im + 32'sd32768;
 
-	    assign c_re = p1 - p2;
-	    assign c_im = p3 + p4;
-	endmodule
+    	assign c_re = p_re_rnd[47:16];  // >>16（取 31..16）
+    	assign c_im = p_im_rnd[47:16];
+endmodule
+
 
 	`endif

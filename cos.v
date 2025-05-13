@@ -22,7 +22,7 @@ module cos_fixed #(
         sign = 1'b1;    // 第一個項是 -x²/2!
         num = (x * x) >> 16;  // x²
         factorial = 64'd2;
-
+        //$display(" x_input=%0f",  x);
         for (i = 1; i < ITER; i = i + 1) begin
             term = num / factorial;
 
